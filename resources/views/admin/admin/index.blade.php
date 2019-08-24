@@ -13,7 +13,7 @@
         <div class="am-fl am-cf">
           <div class="am-btn-toolbar am-fl">
             <div class="am-btn-group am-btn-group-xs">
-              <button type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</button>
+              <button type="button" class="am-btn am-btn-default" onclick="window.location.href='/admin/add';"><span class="am-icon-plus"></span> 新增</button>
             </div>
 
             <div class="am-form-group am-margin-left am-fl">
@@ -61,17 +61,20 @@
                 <td>{{$v['nickName']}}</td>
                 <td>{{$v['email']}}</td>
                 <td>{{$v['phone']}}</td>
-                <td>{{$v['status']}}</td>
+                <td>
+                    @if($v['status'] == 0)
+                      <a href="javascript:;"  class="am-btn am-btn-danger am-btn-xs">禁用</a>
+                      @else
+                    <a href="javascript:;"  class="am-btn am-btn-success am-btn-xs">禁用</a>
+                   @endif
+                </td>
                 <td>{{$v['createdAt']}}</td>
                 <td>{{$v['updatedAt']}}</td>
                 <td>
-                  <div class="am-btn-toolbar">
                     <div class="am-btn-group am-btn-group-xs">
-                      <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                      <button class="am-btn am-btn-default am-btn-xs"><span class="am-icon-copy"></span> 复制</button>
-                      <button class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                      <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location.href='/admin/edit/{{$v['id']}}';"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                      <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger"><span class="am-icon-trash-o"></span> 删除</button>
                     </div>
-                  </div>
                 </td>
               </tr>
             @endforeach

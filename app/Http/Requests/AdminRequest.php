@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @package App\Http\Requests
  * 账号校验器
  */
-class AdminRequest extends FormRequest
+class AdminRequest extends CommonRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -24,7 +24,6 @@ class AdminRequest extends FormRequest
             'email'=>'required|email',
             'phone'=>'required|digits:11',
             'nickName'=>'required',
-            'status'=>'in:0,1',
             'roleId'=>'numeric'
         ];
     }

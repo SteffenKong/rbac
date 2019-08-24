@@ -34,6 +34,15 @@ Route::group(['namespace'=>'admin'],function() {
         Route::group(['prefix'=>'admin'],function() {
             //账号列表
             Route::get('index','AdminController@index');
+
+            //账号添加界面
+            Route::get('add','AdminController@addView');
+            Route::post('add','AdminController@add');
+
+            Route::get('edit/{id}','AdminController@editView')->where(['\d+']);
+            Route::put('edit','AdminController@edit');
+
+            Route::delete('delete{id}','AdminController@delete')->where(['\d+']);
         });
     });
 });

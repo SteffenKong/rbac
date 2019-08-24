@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Http\Requests\AdminRequest;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -49,7 +50,7 @@ class AdminController extends Controller
      * @return false|string
      * 添加账号
      */
-    public function add(LoginRequest $request) {
+    public function add(AdminRequest $request) {
         $data = $request->all();
 
         if($this->adminModel->getColumnValIsExists('account',$data['account'])) {
@@ -64,8 +65,13 @@ class AdminController extends Controller
             return Json_print('001','手机已存在');
         }
 
-        if($this->adminModel->getColumnValIsExists('nickName',$data['nickName'])) {
+        if($this->adminModel->getColumnValIsExists('nick_name',$data['nickName'])) {
             return Json_print('001','真实名称已存在');
+        }
+
+        $status = 1;
+        if(isset($data['status'])) {
+            $status = 0;
         }
 
         $roleId = 0;
@@ -73,7 +79,7 @@ class AdminController extends Controller
             $roleId = $data['roleId'];
         }
 
-        $res = $this->adminModel->add($data['account'],$data['password'],$data['nickName'],$data['email'],$data['phone'],$data['status'],$roleId);
+        $res = $this->adminModel->add($data['account'],$data['password'],$data['nickName'],$data['email'],$data['phone'],$status,$roleId);
         if(!$res) {
             return Json_print('001','录入失败');
         }
@@ -81,7 +87,11 @@ class AdminController extends Controller
     }
 
 
-
+    /**
+     * @param LoginRequest $request
+     * @return false|string
+     * 编辑账号
+     */
     public function edit(LoginRequest $request) {
         $data = $request->all();
 
@@ -100,17 +110,47 @@ class AdminController extends Controller
         if($this->adminModel->getColumnValIsExists('nickName',$data['nickName'])) {
             return Json_print('001','真实名称已存在');
         }
+
+        $status = 1;
+        if(isset($data['status'])) {
+            $status = 0;
+        }
+
+        $roleId = 0;
+        if(!empty($data['roleId'])) {
+            $roleId = $data['roleId'];
+        }
+
+
+        $res = $this->adminModel->edit($data['id'],$data['account'],$data['password'],$data['nickName'],$data['email'],$data['phone'],$status,$roleId);
+
+        if(!$res) {
+            return Json_print('001','录入失败');
+        }
+        return Json_print('000','录入成功');
     }
 
 
-
-    public function editView() {
-        return view('/admin/admin/edit');
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * 显示编辑界面
+     */
+    public function editView(int $id) {
+        $admin = $this->adminModel->getOne(intval($id));
+        return view('/admin/admin/edit',compact('admin'));
     }
 
 
-
-    public function delete() {
-
+    /**
+     * @param int $id
+     * @return false|string
+     * 删除账号
+     */
+    public function delete(int $id) {
+        $res = $this->adminModel->delData(intval($id));
+        if(!$res) {
+            return Json_print('001','删除失败');
+        }
+        return Json_print('000','删除成功');
     }
 }

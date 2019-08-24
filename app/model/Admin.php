@@ -2,6 +2,7 @@
 
 namespace App\model;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -87,29 +88,82 @@ class Admin extends Model
     }
 
 
-    public function add($account,$password,$nickName,$email,$phone,$status,$roleId) {
 
+    /**
+     * @param $account
+     * @param $password
+     * @param $nickName
+     * @param $email
+     * @param $phone
+     * @param $status
+     * @param $roleId
+     * @return mixed
+     * 添加账号
+     */
+    public function add($account,$password,$nickName,$email,$phone,$status,$roleId) {
+        return Admin::create([
+            'account'=>$account,
+            'password'=>password_hash($password,PASSWORD_DEFAULT),
+            'nick_name'=>$nickName,
+            'email'=>$email,
+            'phone'=>$phone,
+            'status'=>$status,
+            'role_id'=>$roleId,
+            'created_at'=>Carbon::now()->toDateTimeString(),
+            'updated_at'=>Carbon::now()->toDateTimeString()
+        ]);
     }
+
 
     public function edit($id,$account,$password,$nickName,$email,$phone,$status,$roleId) {
 
     }
 
-    public function delData() {
 
+    /**
+     * @param $id
+     * @return mixed
+     * 删除数据
+     */
+    public function delData($id) {
+        return Admin::where('id',$id)->delete();
     }
 
-    public function getOne() {
 
+    /**
+     * @param $id
+     * @return mixed
+     * 获取单条数据
+     */
+    public function getOne($id) {
+        return Admin::where('id',$id)->first();
     }
 
+
+    /**
+     * @param $columnName
+     * @param $value
+     * @return bool
+     * 查找指定值是否存在
+     */
     public function getColumnValIsExists($columnName,$value) {
-
+        $bool = Admin::where($columnName,$value)->count();
+        return (bool)$bool;
     }
 
+
+    /**
+     * @param $id
+     * @param $columnName
+     * @param $value
+     * @return bool
+     * 查找指定值是否存在,除去当前id
+     */
     public function getColumnValIsExistsById($id,$columnName,$value) {
-
+        $bool = Admin::where($columnName,$value)->where('id','!=',$id)->count();
+        return (bool)$bool;
     }
+
 
     public function changeStatus($id) {
 
