@@ -46,6 +46,11 @@ class LoginController extends Controller
             return Json_print('001','登陆失败');
         }
 
+        $isDeny = $this->adminModel->getStatus($admin->id);
+        if(!$isDeny) {
+            return Json_print('000','账号被禁用 - 请联系管理员SteffenKong');
+        }
+
         Session::put('admin',$admin);
 
         return Json_print('000','登陆成功');

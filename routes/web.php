@@ -18,13 +18,14 @@ Route::get('/', function () {
 
 Route::group(['namespace'=>'admin'],function() {
 
-    //登陆
+    //登录
     Route::get('login','LoginController@login')->name('login');
     Route::post('sign','LoginController@sign');
 
 
     //检测是否登录的中间件
     Route::group(['middleware'=>['CheckLogin']],function() {
+
         //首页
         Route::get('index','IndexController@index');
         //注销
@@ -32,6 +33,9 @@ Route::group(['namespace'=>'admin'],function() {
 
         //前缀为admin的路由
         Route::group(['prefix'=>'admin'],function() {
+
+            /*************************** 帐号管理 *****************************/
+
             //账号列表
             Route::get('index','AdminController@index');
 
@@ -39,10 +43,21 @@ Route::group(['namespace'=>'admin'],function() {
             Route::get('add','AdminController@addView');
             Route::post('add','AdminController@add');
 
+            //编辑
             Route::get('edit/{id}','AdminController@editView')->where(['\d+']);
             Route::put('edit','AdminController@edit');
+            Route::post('changeStatus','AdminController@changeStatus');
+            Route::post('changePass','AdminController@changePass');
 
-            Route::delete('delete{id}','AdminController@delete')->where(['\d+']);
+            //删除帐号
+            Route::delete('delete','AdminController@delete');
+
+
+            /***************************角色管理*****************************/
+
+
+
+            /***************************权限管理*****************************/
         });
     });
 });

@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
+use App\Http\Requests\CommonRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @package App\Http\Requests
  * 账号校验器
  */
-class AdminRequest extends CommonRequest
+class AdminEditRequest extends CommonRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,7 +21,6 @@ class AdminRequest extends CommonRequest
     {
         return [
             'account'=>'required',
-            'password'=>'required',
             'email'=>'required|email',
             'phone'=>'required|digits:11',
             'nickName'=>'required',
@@ -36,7 +36,6 @@ class AdminRequest extends CommonRequest
     {
         return [
             'account.required' => '请填写账号',
-            'password.required' => '请填写密码',
             'email.required' => '请填写电子邮箱',
             'email.email' => '邮箱格式错误',
             'phone.required' => '请填写手机号',
