@@ -21,7 +21,7 @@ class Loader {
      */
     public static function sigltion($className) {
         if(!isset(self::$instanceClass[$className])) {
-            return self::$instanceClass[$className];
+            self::$instanceClass[$className] = app($className);
         }
         return self::$instanceClass[$className];
     }
