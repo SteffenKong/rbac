@@ -153,4 +153,33 @@ class AdminController extends Controller
         }
         return Json_print('000','删除成功');
     }
+
+
+    /**
+     * @param int $id
+     * @return false|string
+     * 修改帐号状态
+     */
+    public function changeStatus(int $id) {
+        $res = $this->adminModel->changeStatus(intval($id));
+        if(!$res) {
+            return Json_print('001','修改状态失败');
+        }
+        return Json_print('000','修改状态成功');
+    }
+
+
+    /**
+     * @param int $id
+     * @return false|string
+     * 修改密码
+     */
+    public function changePass(int $id) {
+        $password = \request()->get('password');
+        $res = $this->adminModel->changePassword(intval($id),$password);
+        if(!$res) {
+            return Json_print('001','密码修改失败');
+        }
+        return Json_print('000','密码修改成功');
+    }
 }

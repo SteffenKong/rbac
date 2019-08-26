@@ -23,8 +23,7 @@
                     <div class="am-form-group">
                         <label for="user-name" class="col-sm-3 am-form-label">账号</label>
                         <div class="col-sm-9">
-                            <input type="text" name="account" value="{{$admin['account']}}" id="user-name" placeholder="请输入账号">
-
+                            <input type="text" name="account" value="{{$admin['account']}}" id="user-name" placeholder="请输入账号" />
                         </div>
                     </div>
 

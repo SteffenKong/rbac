@@ -115,8 +115,28 @@ class Admin extends Model
     }
 
 
+    /**
+     * @param $id
+     * @param $account
+     * @param $password
+     * @param $nickName
+     * @param $email
+     * @param $phone
+     * @param $status
+     * @param $roleId
+     * @return mixed
+     * 编辑帐号
+     */
     public function edit($id,$account,$password,$nickName,$email,$phone,$status,$roleId) {
-
+        return Admin::where('id',$id)->update([
+            'account'=>$account,
+            'password'=>password_hash($password,PASSWORD_DEFAULT),
+            'nick_name'=>$nickName,
+            'email'=>$email,
+            'phone'=>$phone,
+            'status'=>$status,
+            'roleId'=>$roleId
+        ]);
     }
 
 
@@ -165,11 +185,29 @@ class Admin extends Model
     }
 
 
+    /**
+     * @param $id
+     * @return mixed
+     * 修改帐号的状态
+     */
     public function changeStatus($id) {
-
+        $statusRes = Admin::where('id',$id)->first(['status']);
+        $status = 1;
+        if($statusRes['status'] == 1) {
+            $status = 0;
+        }
+        return Admin::where('id',$id)->update(['status'=>$status]);
     }
 
-    public function changePassword($id,$password) {
 
+    /**
+     * @param $id
+     * @param $password
+     * @return mixed
+     * 修改密码
+     */
+    public function changePassword($id,$password) {
+        $hashPass = password_hash($password,PASSWORD_DEFAULT);
+        return Admin::where('id',$id)->update(['password'=>$hashPass]);
     }
 }
