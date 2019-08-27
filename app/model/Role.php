@@ -112,7 +112,6 @@ class Role extends Model
             'role_name'=>$roleName,
             'description'=>$description,
             'status'=>$status,
-            'created_at'=>Carbon::now()->toDateTimeString(),
             'updated_at'=>Carbon::now()->toDateTimeString()
         ]);
     }
@@ -139,7 +138,7 @@ class Role extends Model
         if($statusRes->status == 1) {
             $status = 0;
         }
-        return Admin::where('id',$id)->update(['status'=>$status]);
+        return Admin::where('id',$id)->update(['status'=>$status,'updated_at'=>Carbon::now()->toDateTimeString()]);
     }
 
 

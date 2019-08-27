@@ -26,3 +26,27 @@ if(!function_exists('Json_print')) {
         return json_encode($result);
     }
 }
+
+
+/**
+ * 无限级分类辅助函数
+ */
+if(!function_exists('getTree')) {
+    /**
+     * @param $data
+     * @param int $pid
+     * @param int $level
+     * @return array
+     */
+    function getTree($data,$pid = 0,$level = 0) {
+        $list = [];
+        foreach ($data ?? [] as $key=>$value) {
+            if($value['pid'] == $pid) {
+                $value['level'] = $level;
+                $list[] = $value;
+                $list = $list+$this->deepFormatTree($data,$value['id'],$level+1);
+            }
+        }
+        return $list;
+    }
+}

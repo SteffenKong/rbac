@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * Class AdminRequest
  * @package App\Http\Requests
- * 账号校验器
+ * 账号编辑校验器
  */
 class AdminEditRequest extends CommonRequest
 {

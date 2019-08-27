@@ -58,7 +58,7 @@ create table if not exists monda_permission_role(
 create table if not exists monda_permissions(
     id mediumint unsigned not null auto_increment,
     permission_name varchar(191) not null comment '权限名称',
-    url  varchar(191) not null comment '权限路由',
+    url  varchar(191) comment '权限路由',
     pid mediumint unsigned default 0 comment '父级id',
     created_at int not null comment '创建时间',
     updated_at int not null comment '修改时间',

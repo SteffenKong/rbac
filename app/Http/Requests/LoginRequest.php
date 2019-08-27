@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests;
 
-
+/**
+ * Class LoginRequest
+ * @package App\Http\Requests
+ * 登录校验器
+ */
 class LoginRequest extends CommonRequest
 {
     /**

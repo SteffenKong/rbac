@@ -35,7 +35,6 @@ class Tree {
     public function __construct($config)
     {
         $this->setConfig($config);
-        $this->initVar();
     }
 
 
@@ -56,24 +55,6 @@ class Tree {
 
     /**
      * @param $data
-     * 快速生成树状结构
-     */
-    public function formatTree($data) {
-        $treeData = $this->getTreeChilds($data);
-        return $this->format($treeData);
-    }
-
-    public function getTreeChilds($data) {
-        //TODO
-    }
-
-    private function format($treeData) {
-        //TODO
-    }
-
-
-    /**
-     * @param $data
      * @param int $pid
      * @param int $level
      * @return array
@@ -82,10 +63,10 @@ class Tree {
     public function deepFormatTree($data,$pid = 0,$level = 0) {
         $list = [];
         foreach ($data ?? [] as $key=>$value) {
-            if($value['pid'] == $pid) {
+            if($value[$this->pidName] == $pid) {
                 $value['level'] = $level;
                 $list[] = $value;
-                $this->deepFormatTree($data,$value['id'],$level+1);
+                $list = $list+$this->deepFormatTree($data,$value[$this->idName],$level+1);
             }
         }
         return $list;

@@ -2,19 +2,16 @@
 
 namespace App\Http\Requests\Permission;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\CommonRequest;
 
-class PermissionRequest extends FormRequest
+
+/**
+ * Class PermissionRequest
+ * @package App\Http\Requests\Permission
+ * 权限参数校验器
+ */
+class PermissionRequest extends CommonRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -24,7 +21,21 @@ class PermissionRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'permissionName'=>'required',
+            'pid'=>'numeric',
+        ];
+    }
+
+
+    /**
+     * @return array
+     * 展示错误信息
+     */
+    public function messages()
+    {
+        return [
+            'permissionName.required'=>'请填写权限名称',
+            'pid.numeric'=>'父级id类型必须为数字'
         ];
     }
 }

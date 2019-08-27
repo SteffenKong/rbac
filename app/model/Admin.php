@@ -138,7 +138,8 @@ class Admin extends Model{
             'email'=>$email,
             'phone'=>$phone,
             'status'=>$status,
-            'role_id'=>$roleId
+            'role_id'=>$roleId,
+            'updated_at'=>Carbon::now()->toDateTimeString()
         ]);
     }
 
@@ -199,7 +200,7 @@ class Admin extends Model{
         if($statusRes->status == 1) {
             $status = 0;
         }
-        return Admin::where('id',$id)->update(['status'=>$status]);
+        return Admin::where('id',$id)->update(['status'=>$status,'updated_at'=>Carbon::now()->toDateTimeString()]);
     }
 
 
@@ -211,7 +212,7 @@ class Admin extends Model{
      */
     public function changePassword($id,$password) {
         $hashPass = password_hash($password,PASSWORD_DEFAULT);
-        return Admin::where('id',$id)->update(['password'=>$hashPass]);
+        return Admin::where('id',$id)->update(['password'=>$hashPass,'updated_at'=>Carbon::now()->toDateTimeString()]);
     }
 
 
