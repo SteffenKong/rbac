@@ -68,8 +68,12 @@ class Admin extends Model
      * @return array
      * 分页获取数据
      */
-    public function getList($pageSize) {
-        $list =  Admin::orderBy('id','desc')->paginate($pageSize);
+    public function getList($pageSize,$where) {
+        $list =  Admin::orderBy('id','desc')
+            ->when(isset($where['account']) && !empty($where['account']),function($query) use($where){
+                return $query->where('account','like','%'.$where['account'].'%');
+            })
+            ->paginate($pageSize);
         $result = [];
         foreach ($list ?? [] as $key => $value) {
             $result[] = [
@@ -130,12 +134,12 @@ class Admin extends Model
     public function edit($id,$account,$password,$nickName,$email,$phone,$status,$roleId) {
         return Admin::where('id',$id)->update([
             'account'=>$account,
-            'password'=>password_hash($password,PASSWORD_DEFAULT),
+            'password'=>$password,
             'nick_name'=>$nickName,
             'email'=>$email,
             'phone'=>$phone,
             'status'=>$status,
-            'roleId'=>$roleId
+            'role_id'=>$roleId
         ]);
     }
 
@@ -193,7 +197,7 @@ class Admin extends Model
     public function changeStatus($id) {
         $statusRes = Admin::where('id',$id)->first(['status']);
         $status = 1;
-        if($statusRes['status'] == 1) {
+        if($statusRes->status == 1) {
             $status = 0;
         }
         return Admin::where('id',$id)->update(['status'=>$status]);
@@ -209,5 +213,40 @@ class Admin extends Model
     public function changePassword($id,$password) {
         $hashPass = password_hash($password,PASSWORD_DEFAULT);
         return Admin::where('id',$id)->update(['password'=>$hashPass]);
+    }
+
+
+    /**
+     * @param $id
+     * @return mixed
+     * 获取旧密码
+     */
+    public function getOldPass($id) {
+        $pass = Admin::where('id',$id)->first(['password']);
+        return $pass->password;
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     * 判断是否为超级管理员
+     */
+    public function isSuperAdmin($id) {
+        $isSuperAdmin = Admin::where('id',$id)->value('role_id');
+        if($isSuperAdmin != 0) {
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * @param $id
+     * @return bool
+     * 获取管理员状态
+     */
+    public function getStatus($id) {
+        $status = Admin::where('id',$id)->value(['status']);
+        return (bool)$status;
     }
 }

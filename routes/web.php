@@ -46,11 +46,11 @@ Route::group(['namespace'=>'admin'],function() {
             //编辑
             Route::get('edit/{id}','AdminController@editView')->where(['\d+']);
             Route::put('edit','AdminController@edit');
-            Route::post('changeStatus/{id}','AdminController@changeStatus')->where(['\d+']);
-            Route::post('changePass/{id}','AdminController@changePass')->where(['\d+']);
+            Route::post('changeStatus','AdminController@changeStatus');
+            Route::post('changePass','AdminController@changePass');
 
             //删除帐号
-            Route::delete('delete{id}','AdminController@delete')->where(['\d+']);
+            Route::delete('delete','AdminController@delete');
 
 
             /***************************角色管理*****************************/

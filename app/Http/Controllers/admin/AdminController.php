@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Requests\AdminRequest;
+use App\Http\Requests\Admin\AdminEditRequest;
+use App\Http\Requests\Admin\AdminRequest;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -31,7 +32,8 @@ class AdminController extends Controller
      */
     public function index(Request $request) {
         $pageSize = $request->get('pageSize',config('miss.pagesize'));
-        $list = $this->adminModel->getList($pageSize);
+        $where['account'] = trim($request->get('account',''));
+        $list = $this->adminModel->getList($pageSize,$where);
         return view('admin/admin/index',compact('list'));
     }
 
@@ -92,22 +94,22 @@ class AdminController extends Controller
      * @return false|string
      * 编辑账号
      */
-    public function edit(LoginRequest $request) {
+    public function edit(AdminEditRequest $request) {
         $data = $request->all();
 
-        if($this->adminModel->getColumnValIsExists('account',$data['account'])) {
+        if($this->adminModel->getColumnValIsExistsById($data['id'],'account',$data['account'])) {
             return Json_print('001','账号已存在');
         }
 
-        if($this->adminModel->getColumnValIsExists('email',$data['email'])) {
+        if($this->adminModel->getColumnValIsExistsById($data['id'],'email',$data['email'])) {
             return Json_print('001','邮箱已存在');
         }
 
-        if($this->adminModel->getColumnValIsExists('phone',$data['phone'])) {
+        if($this->adminModel->getColumnValIsExistsById($data['id'],'phone',$data['phone'])) {
             return Json_print('001','手机已存在');
         }
 
-        if($this->adminModel->getColumnValIsExists('nickName',$data['nickName'])) {
+        if($this->adminModel->getColumnValIsExistsById($data['id'],'nick_name',$data['nickName'])) {
             return Json_print('001','真实名称已存在');
         }
 
@@ -121,13 +123,20 @@ class AdminController extends Controller
             $roleId = $data['roleId'];
         }
 
+        $password = '';
+        if(empty($data['password'])) {
+            $password = $this->adminModel->getOldPass($data['id']);
+        }else {
+            $password = password_hash($data['password'],PASSWORD_DEFAULT);
+        }
 
-        $res = $this->adminModel->edit($data['id'],$data['account'],$data['password'],$data['nickName'],$data['email'],$data['phone'],$status,$roleId);
+
+        $res = $this->adminModel->edit($data['id'],$data['account'],$password ,$data['nickName'],$data['email'],$data['phone'],$status,$roleId);
 
         if(!$res) {
-            return Json_print('001','录入失败');
+            return Json_print('001','编辑失败');
         }
-        return Json_print('000','录入成功');
+        return Json_print('000','编辑成功');
     }
 
 
@@ -146,8 +155,18 @@ class AdminController extends Controller
      * @return false|string
      * 删除账号
      */
-    public function delete(int $id) {
-        $res = $this->adminModel->delData(intval($id));
+    public function delete(Request $request) {
+        $id = $request->all('id');
+        if(empty($id['id'])) {
+            return Json_print('001','id非法');
+        }
+
+        $isSuper = $this->adminModel->isSuperAdmin(intval($id['id']));
+        if($isSuper) {
+            return Json_print('001','超级管理员不能删除');
+        }
+
+        $res = $this->adminModel->delData(intval($id['id']));
         if(!$res) {
             return Json_print('001','删除失败');
         }
@@ -160,7 +179,11 @@ class AdminController extends Controller
      * @return false|string
      * 修改帐号状态
      */
-    public function changeStatus(int $id) {
+    public function changeStatus(Request $request) {
+        $id = $request->post('id');
+        if(empty($id)) {
+            return Json_print('001','id非法');
+        }
         $res = $this->adminModel->changeStatus(intval($id));
         if(!$res) {
             return Json_print('001','修改状态失败');
@@ -174,8 +197,18 @@ class AdminController extends Controller
      * @return false|string
      * 修改密码
      */
-    public function changePass(int $id) {
-        $password = \request()->get('password');
+    public function changePass(Request $request) {
+        $id = $request->post('id');
+        $password = $request->get('password');
+        if(empty($id)) {
+            return Json_print('001','id非法');
+        }
+
+        if(empty($password)) {
+            return Json_print('001','密码不能为空');
+        }
+
+
         $res = $this->adminModel->changePassword(intval($id),$password);
         if(!$res) {
             return Json_print('001','密码修改失败');

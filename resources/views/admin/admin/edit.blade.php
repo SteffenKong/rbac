@@ -5,7 +5,7 @@
     <!-- content start -->
     <div class="admin-content">
         <div class="am-cf am-padding">
-            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">账号编辑</strong> / <small>Account Add</small></div>
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">账号编辑</strong> / <small>Account Edit</small></div>
         </div>
 
         <hr/>
@@ -87,7 +87,7 @@
 
                     <div class="am-form-group">
                         <div class="col-sm-9 col-sm-push-3">
-                            <button type="button" class="am-btn am-btn-primary" id="addBtn" style="width:150px; margin-top:30px;">编辑</button>
+                            <button type="button" class="am-btn am-btn-primary" id="editBtn" style="width:150px; margin-top:30px;">编辑</button>
                             <input type="hidden" value="{{$admin['id']}}" name="id" />
                         </div>
                     </div>
@@ -101,7 +101,7 @@
 @section('script')
     <script type="text/javascript">
         $(function() {
-            $("#addBtn").click(function() {
+            $("#editBtn").click(function() {
                 let data = $("form").serialize();
 
                 $.ajaxSetup({
