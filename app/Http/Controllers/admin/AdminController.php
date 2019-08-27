@@ -8,7 +8,7 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\model\Admin;
-
+use Tools\Loader;
 
 /**
  * Class AdminController
@@ -21,7 +21,8 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->adminModel = new Admin();
+//        $this->adminModel = new Admin();
+        $this->adminModel = Loader::sigltion(Admin::class);
     }
 
 

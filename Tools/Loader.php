@@ -5,6 +5,7 @@
  * Date: 19-8-26
  * Time: 19-8-26
  */
+namespace Tools;
 
 /**
  * Class Loader

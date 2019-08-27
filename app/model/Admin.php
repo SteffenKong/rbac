@@ -10,9 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\model
  * 账号模型
  */
-class Admin extends Model
-{
-    public $timestamps = true;
+class Admin extends Model{
+
     protected $guarded = [];
     protected $primaryKey = 'id';
     protected $table = 'admin';
@@ -68,7 +67,7 @@ class Admin extends Model
      * @return array
      * 分页获取数据
      */
-    public function getList($pageSize,$where) {
+    public function getList($pageSize,$where = []) {
         $list =  Admin::orderBy('id','desc')
             ->when(isset($where['account']) && !empty($where['account']),function($query) use($where){
                 return $query->where('account','like','%'.$where['account'].'%');
