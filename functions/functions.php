@@ -44,7 +44,7 @@ if(!function_exists('getTree')) {
             if($value['pid'] == $pid) {
                 $value['level'] = $level;
                 $list[] = $value;
-                $list = $list+$this->deepFormatTree($data,$value['id'],$level+1);
+                $list = array_merge($list,getTree($data,$value['id'],$level+1));
             }
         }
         return $list;

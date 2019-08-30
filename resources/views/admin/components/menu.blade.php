@@ -7,8 +7,8 @@
             <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
                 <li><a href="admin-user.html" class="am-cf"><span class="am-icon-check"></span> 个人信息<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
                 <li><a href="{{url('/admin/index')}}"><span class="am-icon-puzzle-piece"></span> 账号列表</a></li>
-                <li><a href="admin-help.html"><span class="am-icon-puzzle-piece"></span> 角色列表</a></li>
-                <li><a href="admin-help.html"><span class="am-icon-puzzle-piece"></span> 权限列表</a></li>
+                <li><a href="{{url('/role/index')}}"><span class="am-icon-puzzle-piece"></span> 角色列表</a></li>
+                <li><a href="{{url('/permission/index')}}"><span class="am-icon-puzzle-piece"></span> 权限列表</a></li>
             </ul>
         </li>
         <li><a href="{{route('logout')}}"><span class="am-icon-sign-out"></span> 注销</a></li>

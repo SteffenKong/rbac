@@ -15,7 +15,7 @@ use Tools\Loader;
  */
 class RoleController extends Controller
 {
-
+    /* @var Role $roleModel */
     protected $roleModel;
 
     public function __construct()
@@ -75,6 +75,9 @@ class RoleController extends Controller
      * 展示角色编辑界面
      */
     public function editView(int $id) {
+        if(empty($id)) {
+            return Json_print('001','ID非法');
+        }
         $data = $this->roleModel->getOne(intval($id));
         return view('/admin/role/edit',compact('data'));
     }
@@ -125,5 +128,23 @@ class RoleController extends Controller
             return Json_print('001','删除失败');
         }
         return Json_print('000','删除成功');
+    }
+
+
+    /**
+     * @param Request $request
+     * @return false|string
+     * 更换角色状态
+     */
+    public function changeStatus(Request $request) {
+        $id = $request->post('id');
+        if(empty($id)) {
+            return Json_print('001','ID不能为空');
+        }
+        $res = $this->roleModel->changeStatus($id);
+        if(!$res) {
+            return Json_print('001','编辑失败');
+        }
+        return Json_print('000','编辑成功');
     }
 }

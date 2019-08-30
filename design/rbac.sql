@@ -33,8 +33,8 @@ create table if not exists monda_roles(
     role_name varchar(191) not null comment '角色名称',
     description text comment '角色描述',
     status tinyint default 1 comment '角色状态 0 - 禁用  1 - 启用',
-    created_at int not null comment '创建时间',
-    updated_at int not null comment '修改时间',
+    created_at datetime not null comment '创建时间',
+    updated_at datetime not null comment '修改时间',
     primary key(id),
     unique key uk_role_name (role_name),
     index idx_status (status)
@@ -46,8 +46,8 @@ create table if not exists monda_permission_role(
     id mediumint unsigned not null auto_increment,
     role_id mediumint unsigned not null comment '角色id',
     permission_id mediumint unsigned not null comment '权限id',
-    created_at int not null comment '创建时间',
-    updated_at int not null comment '修改时间',
+    created_at datetime not null comment '创建时间',
+    updated_at datetime not null comment '修改时间',
     primary key (id),
     index idx_role_id (role_id),
     index idx_permission_id (permission_id)
@@ -60,8 +60,8 @@ create table if not exists monda_permissions(
     permission_name varchar(191) not null comment '权限名称',
     url  varchar(191) comment '权限路由',
     pid mediumint unsigned default 0 comment '父级id',
-    created_at int not null comment '创建时间',
-    updated_at int not null comment '修改时间',
+    created_at datetime not null comment '创建时间',
+    updated_at datetime not null comment '修改时间',
     primary key(id),
     unique key uk_permission_name (permission_name),
     unique key uk_url (url)

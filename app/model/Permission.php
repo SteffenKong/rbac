@@ -23,13 +23,9 @@ class Permission extends Model
      * @return array
      * 获取权限列表
      */
-    public function getList($where) {
-        $list = Role::orderBy('id','desc')
-            ->when(isset($where['roleName']) && !empty($where['roleName']),function($query) use ($where) {
-                return $query->where('roleName','like',$where['roleName']);
-            })
-            ->get();
-
+    public function getList() {
+        $query = Permission::orderBy('id','desc');
+        $list = $query->get();
         $data = [];
         foreach ($list ?? [] as $key=>$value) {
             $data[] = [
@@ -41,8 +37,10 @@ class Permission extends Model
                 'updatedAt'=>$value->updated_at
             ];
         }
+
+        $total = $query->count();
+
         $treeData = getTree($data);
-        $total = $list->total();
 
         return [$treeData,$total];
     }

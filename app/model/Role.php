@@ -3,7 +3,6 @@
 namespace App\model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\model\Admin;
 use Carbon\Carbon;
 
 
@@ -16,7 +15,7 @@ class Role extends Model
 {
 
     protected $guarded = [];
-    protected $table = 'role';
+    protected $table = 'roles';
     protected $primaryKey = 'id';
 
 
@@ -29,7 +28,7 @@ class Role extends Model
     public function getList($pageSize,$where = []) {
         $list = Role::orderBy('id','desc')
             ->when(isset($where['roleName']) && !empty($where['roleName']),function($query) use ($where) {
-                return $query->where('roleName','like',$where['roleName']);
+                return $query->where('role_name','like',$where['roleName']);
             })
             ->paginate($pageSize);
 
@@ -72,7 +71,7 @@ class Role extends Model
      * 检测角色名称是否存在
      */
     public function checkRoleNameIsExists($roleName) {
-        $bool = Admin::where('role_name',$roleName)->count();
+        $bool = Role::where('role_name',$roleName)->count();
         return (bool)$bool;
     }
 
@@ -84,18 +83,41 @@ class Role extends Model
      * 检测除了自身id,名字是否和其他数据有冲突
      */
     public function checkRoleNameIsExistsById($id,$roleName) {
-        $bool = Admin::where('role_name',$roleName)->where('id','!=',$id)->count();
+        $bool = Role::where('role_name',$roleName)->where('id','!=',$id)->count();
         return (bool)$bool;
     }
 
 
     /**
      * @param $id
-     * @return mixed
+     * @return bool
+     * 检测角色是否真在被使用
+     */
+    public function getAdminCountByRoleId($roleId) {
+        $count = Admin::where('role_id',$roleId)->count();
+        return (bool)$count;
+    }
+
+
+    /**
+     * @param $id
+     * @return array
      * 获取单条数据
      */
     public function getOne($id) {
-        return Admin::where('id',$id)->fist();
+        $data = Role::where('id',$id)->first();
+        $return = [];
+        if($data){
+            $return = [
+                'id'=>$data->id,
+                'roleName'=>$data->role_name,
+                'description'=>$data->description,
+                'status'=>$data->status,
+                'createdAt'=>$data->created_at,
+                'updatedAt'=>$data->updated_at
+            ];
+        }
+        return $return;
     }
 
 
@@ -108,7 +130,7 @@ class Role extends Model
      * 编辑数据
      */
     public function edit($id,$roleName,$description,$status) {
-        return Admin::where('id',$id)->update([
+        return Role::where('id',$id)->update([
             'role_name'=>$roleName,
             'description'=>$description,
             'status'=>$status,
@@ -123,7 +145,7 @@ class Role extends Model
      * 删除数据
      */
     public function delData($id) {
-        return Admin::where('id',$id)->delete();
+        return Role::where('id',$id)->delete();
     }
 
 
@@ -133,12 +155,12 @@ class Role extends Model
      * 修改状态
      */
     public function changeStatus($id) {
-        $statusRes = Admin::where('id',$id)->first(['status']);
+        $statusRes = Role::where('id',$id)->value('status');
         $status = 1;
-        if($statusRes->status == 1) {
+        if($statusRes == 1) {
             $status = 0;
         }
-        return Admin::where('id',$id)->update(['status'=>$status,'updated_at'=>Carbon::now()->toDateTimeString()]);
+        return Role::where('id',$id)->update(['status'=>$status,'updated_at'=>Carbon::now()->toDateTimeString()]);
     }
 
 
@@ -147,8 +169,8 @@ class Role extends Model
      * @return bool
      * 判断当前角色是否被使用
      */
-    public function getAdminCountByRoleId($roleId) {
-        $count = Admin::where('role_id',$roleId)->count();
+    public function getRoleCountByRoleId($roleId) {
+        $count = Role::where('role_id',$roleId)->count();
         return (bool)$count;
     }
 }

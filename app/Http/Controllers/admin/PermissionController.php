@@ -30,11 +30,9 @@ class PermissionController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * 获取权限列表
      */
-    public function getList(Request $request) {
-        $where['permissionName'] = trim($request->get('permissionName',''));
-        $where['url'] = trim($request->get('url',''));
-        $list = $this->permissionModel->getList($where);
-        return view('/admin/role/index',compact('list'));
+    public function index(Request $request) {
+        $list = $this->permissionModel->getList();
+        return view('/admin/permission/index',compact('list'));
     }
 
 
@@ -44,7 +42,7 @@ class PermissionController extends Controller
      */
     public function addView() {
         $permissions = $this->permissionModel->getAll();
-        return view('/admin/permission/',compact('permissions'));
+        return view('/admin/permission/add',compact('permissions'));
     }
 
 
@@ -60,7 +58,7 @@ class PermissionController extends Controller
             return Json_print('001','权限名称已存在');
         }
 
-        if($this->permissionModel->checkUrlIsExists($data['url'])) {
+        if($this->permissionModel->checkUrlIsExists($data['url']) && !empty($data['url'])) {
             return Json_print('001','url路由名称已存在');
         }
 

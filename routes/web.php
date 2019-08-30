@@ -31,10 +31,11 @@ Route::group(['namespace'=>'admin'],function() {
         //注销
         Route::get('logout','IndexController@logout')->name('logout');
 
-        //前缀为admin的路由
+
+        /*************************** 帐号管理 *****************************/
         Route::group(['prefix'=>'admin'],function() {
 
-            /*************************** 帐号管理 *****************************/
+
 
             //账号列表
             Route::get('index','AdminController@index');
@@ -51,13 +52,32 @@ Route::group(['namespace'=>'admin'],function() {
 
             //删除帐号
             Route::delete('delete','AdminController@delete');
+        });
 
 
-            /***************************角色管理*****************************/
+        /***************************角色管理*****************************/
+        Route::group(['prefix'=>'role'],function() {
+            Route::get('index','RoleController@index');
+            Route::get('add','RoleController@addView');
+            Route::post('add','RoleController@add');
+            Route::get('edit/{id}','RoleController@editView')->where(['\d+']);
+            Route::put('edit','RoleController@edit');
+            Route::post('changeStatus','RoleController@changeStatus');
+            //删除角色
+            Route::delete('delete','RoleController@delete');
+        });
 
 
 
-            /***************************权限管理*****************************/
+        /***************************权限管理*****************************/
+        Route::group(['prefix'=>'permission'],function() {
+            Route::get('index','PermissionController@index');
+            Route::get('add','PermissionController@addView');
+            Route::post('add','PermissionController@add');
+            Route::get('edit/{id}','PermissionController@editView')->where(['\d+']);
+            Route::put('edit','PermissionController@edit');
+            //删除权限
+            Route::delete('delete','permissionController@delete');
         });
     });
 });

@@ -246,7 +246,7 @@ class Admin extends Model{
      * 获取管理员状态
      */
     public function getStatus($id) {
-        $status = Admin::where('id',$id)->value(['status']);
+        $status = Admin::where('id',$id)->value('status');
         return (bool)$status;
     }
 }
