@@ -35,7 +35,7 @@
             <tr>
               <th class="table-check"><input type="checkbox" /></th>
               <th class="table-id">ID</th>
-              <th class="table-title">权限名称</th>s
+              <th class="table-title">权限名称</th>
               <th class="table-type">路由地址</th>
               <th class="table-author">所属权限</th>
               <th class="table-date">录入日期</th>
@@ -89,28 +89,28 @@
        */
       function deleteData(obj) {
 
-          if(window.confirm('请问真的要删除吗') == false) {
-              return false;
-          }
+        if (window.confirm('请问真的要删除吗') == false) {
+          return false;
+        }
 
-          let id = $(obj).attr('data-id');
-          if(id == '') {
-            alert('id非法');
-          }
+        let id = $(obj).attr('data-id');
+        if (id == '') {
+          alert('id非法');
+        }
 
         $.ajaxSetup({
-          headers: { 'X-CSRF-TOKEN' : $("meta[name='token']").attr('content') }
+          headers: {'X-CSRF-TOKEN': $("meta[name='token']").attr('content')}
         });
 
         $.ajax({
-          url:'/permission/delete',
-          dataType:'Json',
-          type:'delete',
-          data:{id:id},
-          success:function(data) {
-            if(data.code === '000') {
+          url: '/permission/delete',
+          dataType: 'Json',
+          type: 'delete',
+          data: {id: id},
+          success: function (data) {
+            if (data.code === '000') {
               window.location.reload();
-            }else {
+            } else {
               alert(data.message);
             }
           }

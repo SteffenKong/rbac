@@ -13,7 +13,7 @@ use Tools\Loader;
  * @package App\Http\Controllers\admin
  * 权限控制器
  */
-class PermissionController extends Controller
+class PermissionController extends BaseController
 {
 
     /* @var Permission $permissionModel */
@@ -21,6 +21,7 @@ class PermissionController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->permissionModel = Loader::sigltion(Permission::class);
     }
 

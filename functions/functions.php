@@ -50,3 +50,31 @@ if(!function_exists('getTree')) {
         return $list;
     }
 }
+
+
+/**
+ * 生成树状辅助函数
+ */
+if(!function_exists('getTreeList')) {
+    /**
+     * @param $data
+     * @param int $pid
+     * @return array
+     */
+    function getTreeList($data,$pid = 0) {
+        $tree = [];
+        $newTree = [];
+        foreach ($data ?? [] as $key=>$value) {
+            $newTree[$value['id']] = $value;
+        }
+
+        foreach ($newTree ?? [] as $key=>$value) {
+            if($value['pid'] == $pid) {
+                $tree[] = &$newTree[$value['id']];
+            }elseif(isset($newTree[$value['id']])) {
+                $newTree[$value['pid']]['items'][] = &$newTree[$value['id']];
+            }
+        }
+        return $tree;
+    }
+}

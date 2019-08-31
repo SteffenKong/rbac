@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Http\Controllers\admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\model\Admin;
@@ -47,7 +45,7 @@ class LoginController extends Controller
         }
         $isDeny = $this->adminModel->getStatus($admin['id']);
         if(!$isDeny) {
-            return Json_print('000','账号被禁用 - 请联系管理员SteffenKong');
+            return Json_print('001','账号被禁用 - 请联系管理员SteffenKong');
         }
 
         Session::put('admin',$admin);

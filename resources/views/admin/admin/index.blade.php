@@ -77,8 +77,8 @@
                       <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location.href='/admin/edit/{{$v['id']}}';">
                         <span class="am-icon-pencil-square-o"></span> 编辑</button>
 
-                      <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" >
-                        <span class="am-icon-pencil-square-o" id="doc-prompt-toggle"></span> 修改密码 </button>
+{{--                      <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" >--}}
+{{--                        <span class="am-icon-pencil-square-o" id="doc-prompt-toggle"></span> 修改密码 </button>--}}
 
                       <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger" data-id="{{$v['id']}}" onclick="deleteData($(this))"><span class="am-icon-trash-o"></span> 删除</button>
                     </div>

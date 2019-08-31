@@ -24,7 +24,7 @@ Route::group(['namespace'=>'admin'],function() {
 
 
     //检测是否登录的中间件
-    Route::group(['middleware'=>['CheckLogin']],function() {
+    Route::group(['middleware'=>['CheckLogin','CheckAuth']],function() {
 
         //首页
         Route::get('index','IndexController@index');
@@ -63,6 +63,8 @@ Route::group(['namespace'=>'admin'],function() {
             Route::get('edit/{id}','RoleController@editView')->where(['\d+']);
             Route::put('edit','RoleController@edit');
             Route::post('changeStatus','RoleController@changeStatus');
+                Route::get('dirbutePermissionView','RoleController@dirbutePermissionView');
+            Route::post('dirbutePermission','RoleController@dirbutePermission');
             //删除角色
             Route::delete('delete','RoleController@delete');
         });
@@ -78,6 +80,7 @@ Route::group(['namespace'=>'admin'],function() {
             Route::put('edit','PermissionController@edit');
             //删除权限
             Route::delete('delete','permissionController@delete');
+
         });
     });
 });

@@ -73,7 +73,7 @@
                       <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="window.location.href='/role/edit/{{$v['id']}}';">
                         <span class="am-icon-pencil-square-o"></span> 编辑</button>
 
-                      <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" >
+                      <button type="button" data-id="{{$v['id']}}" class="am-btn am-btn-default am-btn-xs am-text-secondary dirbute" >
                         <span class="am-icon-pencil-square-o" id="doc-prompt-toggle"></span> 分配权限 </button>
 
                       <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger" data-id="{{$v['id']}}" onclick="deleteData($(this))"><span class="am-icon-trash-o"></span> 删除</button>
@@ -101,9 +101,29 @@
 
 @section('script')
   <script type="text/javascript">
+
+      $(".dirbute").click(function() {
+          let id = $(this).attr('data-id');
+          if(id == '') {
+              layer.msg('id不能为空',{icon:2});
+          }
+          layer.open({
+              type: 2,
+              title:'分配权限',
+              content: '/role/dirbutePermissionView?id='+id,
+              area: ['500px', '400px'],
+              success: function(layero, index){
+                  var body = layer.getChildFrame('body', index);
+                  var iframeWin = window[layero.find('iframe')[0]['name']];
+              }
+          });
+      });
+
+
+
       function changeStatus(obj) {
               let id = $(obj).attr('data-id');
-              if(id == '') {
+              if(id === '') {
                   alert('id非法');
               }
 

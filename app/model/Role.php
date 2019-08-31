@@ -3,6 +3,7 @@
 namespace App\model;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 use Carbon\Carbon;
 
 
@@ -172,5 +173,80 @@ class Role extends Model
     public function getRoleCountByRoleId($roleId) {
         $count = Role::where('role_id',$roleId)->count();
         return (bool)$count;
+    }
+
+
+    /**
+     * @return array
+     * 取出所有有效的角色
+     */
+    public function getAllRoles() {
+        $roles = Role::where('status',1)->get(['id','role_name']);
+        $return = [];
+        foreach ($roles ?? [] as $key=>$value) {
+            $return[] = [
+                'id'=>$value->id,
+                'roleName'=>$value->role_name,
+            ];
+        }
+        return $return;
+    }
+
+
+    /**
+     * @param $roleId
+     * @param $permissionIds
+     * @return bool
+     * 分配权限
+     */
+    public function dirbute($roleId,$permissionIds) {
+        try {
+            DB::beginTransaction();
+            $res1 = $this->async($roleId);
+            $data = [];
+            foreach ($permissionIds ?? [] as $key=>$value) {
+                $data[] = [
+                    'role_id'=>$roleId,
+                    'permission_id'=>$value,
+                    'created_at'=>Carbon::now()->toDateTimeString(),
+                    'updated_at'=>Carbon::now()->toDateTimeString()
+                ];
+            }
+            $res2 = DB::table('permission_role')->insert($data);
+            if($res1===false || !$res2) {
+                DB::rollBack();
+                return false;
+            }
+            DB::commit();
+            return true;
+        }catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
+    /**
+     * @param $roleId
+     * @return mixed
+     * 异步清楚
+     */
+    public function async($roleId = []) {
+        return PermissionRole::where('role_id',$roleId)->delete();
+    }
+
+
+    /**
+     * @param $roleId
+     * @return array
+     * 获取当前的data
+     */
+    public function getOldPermissions($roleId) {
+        $permissionIds = PermissionRole::where('role_id',$roleId)->get(['permission_id']);
+        $ids = [];
+        foreach ($permissionIds ?? [] as $permissionId) {
+            array_push($ids,$permissionId['permission_id']);
+        }
+
+        return $ids;
     }
 }

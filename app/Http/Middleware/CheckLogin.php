@@ -18,7 +18,6 @@ class CheckLogin
         if(!session()->has('admin')) {
             return redirect(route('login'));
         }
-
         return $next($request);
     }
 }

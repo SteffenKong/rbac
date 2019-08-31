@@ -39,7 +39,7 @@ class Admin extends Model{
         return [
             'id'=>$admin->id,
             'account'=>$admin->account,
-            'roleId'=>$admin->account,
+            'roleId'=>$admin->role_id,
             'nickName'=>$admin->nici_name,
             'email'=>$admin->email,
             'phone'=>$admin->phone,

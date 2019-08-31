@@ -47,7 +47,7 @@ $(".sign").click(function() {
                     window.location.href = '/index';
                 },1000)
             }else if(data.code === '001') {
-                layer.msg('登陆失败',{icon:2});
+                layer.msg(data.message,{icon:2});
                 refreshCaptcha($("#captcha_pic"));
             }else {
                 let errors = data.errors;
