@@ -126,4 +126,8 @@ class RoleController extends Controller
         }
         return Json_print('000','删除成功');
     }
+
+    public function diributePermission() {
+
+    }
 }
