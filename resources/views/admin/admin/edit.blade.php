@@ -63,11 +63,7 @@
                         <div class="col-sm-9">
                             <div class="am-btn-group" data-am-button>
                                 <label class="am-btn am-btn-primary">
-                                    @if($admin['status'] == 1)
-                                        <input type="checkbox" name="status" value="0" checked="checked">禁用
-                                    @else
                                         <input type="checkbox" name="status" value="0">禁用
-                                    @endif
                                 </label>
                             </div>
                         </div>
@@ -76,12 +72,19 @@
 
                     <div class="am-form-group">
                         <label for="user-intro" class="col-sm-3 am-form-label">角色</label>
-                        <div class="col-sm-9">
-                            <div class="am-btn-group" data-am-button>
-                                <label class="am-btn am-btn-primary">
-                                    <input type="radio" name="roleId" id="option1" value="0">超级管理员
-                                </label>
-                            </div>
+                        <div class="col-sm-9" style="position: relative; top:10px;">
+                            @if($admin['role_id'] == 0)
+                                <input type="radio" name="roleId" value="0" style="margin-left:20px;" checked="checked">超级管理员
+                            @else
+                                <input type="radio" name="roleId" value="0" style="margin-left:20px;">超级管理员
+                            @endif
+                            @foreach($roles as $key=>$role)
+                                @if($admin['role_id'] == $role['id'])
+                                <input type="radio" name="roleId" checked="checked" value="{{$role['id']}}" style="margin-left:20px;">{{$role['roleName']}}
+                                @else
+                                    <input type="radio" name="roleId" value="{{$role['id']}}" style="margin-left:20px;">{{$role['roleName']}}
+                                @endif
+                            @endforeach
                         </div>
                     </div>
 

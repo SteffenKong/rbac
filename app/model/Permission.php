@@ -23,13 +23,9 @@ class Permission extends Model
      * @return array
      * 获取权限列表
      */
-    public function getList($where) {
-        $list = Role::orderBy('id','desc')
-            ->when(isset($where['roleName']) && !empty($where['roleName']),function($query) use ($where) {
-                return $query->where('roleName','like',$where['roleName']);
-            })
-            ->get();
-
+    public function getList() {
+        $query = Permission::orderBy('id','desc');
+        $list = $query->get();
         $data = [];
         foreach ($list ?? [] as $key=>$value) {
             $data[] = [
@@ -41,8 +37,10 @@ class Permission extends Model
                 'updatedAt'=>$value->updated_at
             ];
         }
+
+        $total = $query->count();
+
         $treeData = getTree($data);
-        $total = $list->total();
 
         return [$treeData,$total];
     }
@@ -124,7 +122,7 @@ class Permission extends Model
      * 检测权限名称是否存在,除了不是自身之外
      */
     public function checkPermissionNameIsExistsById($id,$permissionName) {
-        $count = Permission::where('permission_name',$permissionName)->where('id','<>',$id)->count();
+        $count = Permission::where('permission_name',$permissionName)->where('id','!=',$id)->count();
         return (bool)$count;
     }
 
@@ -147,7 +145,7 @@ class Permission extends Model
      * 检测url路由是否存在,除了不是自身之外
      */
     public function checkUrlIsExistsById($id,$url) {
-        $count = Permission::where('permission_name',$url)->where('id','<>',$id)->count();
+        $count = Permission::where('url',$url)->where('id','<>',$id)->where('url','<>',null)->count();
         return (bool)$count;
     }
 
@@ -211,5 +209,50 @@ class Permission extends Model
             $ids = array_column($ids,'id');
         }
         return $ids;
+    }
+
+
+    /**
+     * @param $roleId
+     * @return array
+     * 获取当前角色的所有权限
+     */
+    public function getPermissionsByRoleId($roleId) {
+        $ids = PermissionRole::where('role_id',$roleId)->get(['permission_id']);
+        $permissionIds = [];
+        foreach ($ids ?? [] as $value) {
+            array_push($permissionIds,$value->permission_id);
+        }
+
+        $permissions = Permission::whereIn('id',$permissionIds)->get();
+        $data = [];
+        foreach ($permissions ?? [] as $permission) {
+            $data[] = [
+                'id'=>$permission->id,
+                'permissionName'=>$permission->permission_name,
+                'route'=>$permission->url,
+                'pid'=>$permission->pid
+            ];
+        }
+        return $data;
+    }
+
+
+    /**
+     * @return array
+     * 获取超级管理员的所有权限
+     */
+    public function getPermissionByAdmin() {
+        $permissions = Permission::all();
+        $data = [];
+        foreach ($permissions ?? [] as $permission) {
+            $data[] = [
+                'id'=>$permission->id,
+                'permissionName'=>$permission->permission_name,
+                'route'=>$permission->url,
+                'pid'=>$permission->pid
+            ];
+        }
+        return $data;
     }
 }

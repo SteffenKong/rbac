@@ -73,12 +73,11 @@
 
                 <div class="am-form-group">
                     <label for="user-intro" class="col-sm-3 am-form-label">角色</label>
-                    <div class="col-sm-9">
-                                <div class="am-btn-group" data-am-button>
-                                    <label class="am-btn am-btn-primary">
-                                        <input type="radio" name="roleId" id="option1" value="0">超级管理员
-                                    </label>
-                                </div>
+                    <div class="col-sm-9" style="position: relative; top:10px;">
+                        <input type="radio" name="roleId" value="0" style="margin-left:20px;">超级管理员
+                        @foreach($roles as $key=>$role)
+                            <input type="radio" name="roleId" value="{{$role['id']}}" style="margin-left:20px;">{{$role['roleName']}}
+                        @endforeach
                     </div>
                 </div>
 

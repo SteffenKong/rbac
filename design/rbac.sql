@@ -12,8 +12,8 @@ create table if not exists monda_admin(
     phone varchar(191) not null comment '手机',
     status tinyint default 1 comment '状态 0 - 禁用 1 - 启用',
     role_id mediumint unsigned comment '角色id 角色id为0代表是超级管理员',
-    created_at datetime  comment '创建时间',
-    updated_at datetime  comment '修改时间',
+    created_at datetime  not null comment '创建时间',
+    updated_at datetime  not null comment '修改时间',
     primary key (id),
     unique key uk_account(account),
     unique key uk_nick_name(nick_name),
@@ -33,8 +33,8 @@ create table if not exists monda_roles(
     role_name varchar(191) not null comment '角色名称',
     description text comment '角色描述',
     status tinyint default 1 comment '角色状态 0 - 禁用  1 - 启用',
-    created_at int not null comment '创建时间',
-    updated_at int not null comment '修改时间',
+    created_at datetime not null comment '创建时间',
+    updated_at datetime not null comment '修改时间',
     primary key(id),
     unique key uk_role_name (role_name),
     index idx_status (status)
@@ -46,8 +46,8 @@ create table if not exists monda_permission_role(
     id mediumint unsigned not null auto_increment,
     role_id mediumint unsigned not null comment '角色id',
     permission_id mediumint unsigned not null comment '权限id',
-    created_at int not null comment '创建时间',
-    updated_at int not null comment '修改时间',
+    created_at datetime not null comment '创建时间',
+    updated_at datetime not null comment '修改时间',
     primary key (id),
     index idx_role_id (role_id),
     index idx_permission_id (permission_id)
@@ -60,9 +60,23 @@ create table if not exists monda_permissions(
     permission_name varchar(191) not null comment '权限名称',
     url  varchar(191) comment '权限路由',
     pid mediumint unsigned default 0 comment '父级id',
-    created_at int not null comment '创建时间',
-    updated_at int not null comment '修改时间',
+    created_at datetime not null comment '创建时间',
+    updated_at datetime not null comment '修改时间',
     primary key(id),
     unique key uk_permission_name (permission_name),
     unique key uk_url (url)
+)charset=utf8,engine=innodb;
+
+
+-- 登录日志记录表
+create table if not exists monda_login_log(
+    id mediumint unsigned not null auto_increment,
+    account varchar(191) not null comment '登录帐号',
+    params text not null comment '请求参数',
+    ip varchar(191) not null comment 'ip地址',
+    login_time datetime not null comment '登录时间',
+    created_at datetime not null comment '创建时间',
+    updated_at datetime not null comment '修改时间',
+    primary key(id),
+    index idx_account (account)
 )charset=utf8,engine=innodb;

@@ -10,8 +10,13 @@ use Session;
  * @package App\Http\Controllers\admin
  * 首页控制器
  */
-class IndexController extends Controller
+class IndexController extends BaseController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

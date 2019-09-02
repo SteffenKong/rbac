@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Requests\Admin\AdminEditRequest;
 use App\Http\Requests\Admin\AdminRequest;
 use App\Http\Requests\LoginRequest;
+use App\model\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\model\Admin;
@@ -15,14 +16,19 @@ use Tools\Loader;
  * @package App\Http\Controllers\admin
  * 账号控制器
  */
-class AdminController extends Controller
+class AdminController extends BaseController
 {
+
+    /* @var Admin $adminModel */
     protected $adminModel;
+
+    protected $roleModel;
 
     public function __construct()
     {
-//        $this->adminModel = new Admin();
+        parent::__construct();
         $this->adminModel = Loader::sigltion(Admin::class);
+        $this->roleModel = Loader::sigltion(Role::class);
     }
 
 
@@ -44,7 +50,9 @@ class AdminController extends Controller
      * 账号添加界面
      */
     public function addView() {
-        return view('/admin/admin/add');
+        //取出所有的角色
+        $roles = $this->roleModel->getAllRoles();
+        return view('/admin/admin/add',compact('roles'));
     }
 
 
@@ -146,8 +154,10 @@ class AdminController extends Controller
      * 显示编辑界面
      */
     public function editView(int $id) {
+        //取出所有的角色
+        $roles = $this->roleModel->getAllRoles();
         $admin = $this->adminModel->getOne(intval($id));
-        return view('/admin/admin/edit',compact('admin'));
+        return view('/admin/admin/edit',compact('admin','roles'));
     }
 
 

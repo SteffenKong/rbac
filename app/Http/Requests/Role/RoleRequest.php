@@ -20,7 +20,7 @@ class RoleRequest extends CommonRequest
     {
         return [
             'roleName'=>'required',
-            'description'=>'requuired|max:200'
+            'description'=>'required|max:200'
         ];
     }
 

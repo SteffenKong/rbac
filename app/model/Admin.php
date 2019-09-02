@@ -39,7 +39,7 @@ class Admin extends Model{
         return [
             'id'=>$admin->id,
             'account'=>$admin->account,
-            'roleId'=>$admin->account,
+            'roleId'=>$admin->role_id,
             'nickName'=>$admin->nici_name,
             'email'=>$admin->email,
             'phone'=>$admin->phone,
@@ -246,7 +246,7 @@ class Admin extends Model{
      * 获取管理员状态
      */
     public function getStatus($id) {
-        $status = Admin::where('id',$id)->value(['status']);
+        $status = Admin::where('id',$id)->value('status');
         return (bool)$status;
     }
 }

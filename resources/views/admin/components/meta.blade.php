@@ -8,5 +8,6 @@
 <link rel="apple-touch-icon-precomposed" href="/static/admin/assets/i/app-icon72x72@2x.png">
 <meta name="apple-mobile-web-app-title" content="Amaze UI" />
 <link rel="stylesheet" href="/static/admin/assets/css/amazeui.min.css"/>
+<link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="/static/admin/assets/css/admin.css">
 <meta name="token" content="{!! csrf_token() !!}" />
