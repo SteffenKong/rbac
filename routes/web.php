@@ -20,7 +20,7 @@ Route::group(['namespace'=>'admin'],function() {
 
     //登录
     Route::get('login','LoginController@login')->name('login');
-    Route::post('sign','LoginController@sign');
+    Route::post('sign','LoginController@sign')->middleware(['LoginLog']);
 
 
     //检测是否登录的中间件

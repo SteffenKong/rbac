@@ -62,7 +62,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'CheckLogin' => \App\Http\Middleware\CheckLogin::class,      //检测登陆状态中间件
-        'CheckAuth' => \App\Http\Middleware\CheckAuth::class,        //鉴权中间件,全局使用
+        'CheckAuth' => \App\Http\Middleware\CheckAuth::class,        //鉴权中间件
+        'LoginLog' => \App\Http\Middleware\LoginLog::class,        //记录登录日志中间件
     ];
 
     /**
