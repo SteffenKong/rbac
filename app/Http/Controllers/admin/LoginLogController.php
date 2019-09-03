@@ -13,7 +13,7 @@ use Tools\Loader;
  */
 class LoginLogController extends BaseController
 {
-    /*　@var LoginLog $loginLogModel */
+    /* @var LoginLog $loginLogModel */
     protected $loginLogModel;
 
     public function __construct()
@@ -22,7 +22,15 @@ class LoginLogController extends BaseController
         $this->loginLogModel = Loader::sigltion(LoginLog::class);
     }
 
-    public function index() {
-        //TODO
+
+    /**
+     * @param Request $request
+     * @return false|string
+     * 登录日志列表
+     */
+    public function index(Request $request) {
+        $pageSize = $request->get('pageSize',config('app.pageSize'));
+        $where = [];
+        $data = $this->loginLogModel->getList($pageSize,$where);
     }
 }
