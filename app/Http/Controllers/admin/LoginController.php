@@ -4,7 +4,9 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\model\Admin;
+use Tools\AdminLogin;
 use Session;
+
 
 /**
  * Class LoginController
@@ -14,10 +16,16 @@ use Session;
 class LoginController extends Controller
 {
 
+    use AdminLogin;
+
     protected $adminModel;
 
     public function __construct()
     {
+        //防止重复登录
+        if(Session::exists('admin')) {
+            return redirect('/index');
+        }
         $this->adminModel = new Admin();
     }
 
@@ -49,6 +57,15 @@ class LoginController extends Controller
         }
 
         Session::put('admin',$admin);
+
+        //检测是否在登录
+        if($this->checkIsLoginExists($admin['id'])) {
+            //检测到已有人登录
+            return Json_print('001','不能多点登录');
+        }
+
+        //记录redis
+        $this->setLoginStatus($admin['id']);
 
         return Json_print('000','登陆成功');
     }

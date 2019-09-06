@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use Tools\AdminLogin;
 use Session;
 
 /**
@@ -12,6 +13,8 @@ use Session;
  */
 class IndexController extends BaseController
 {
+
+    use AdminLogin;
 
     public function __construct()
     {
@@ -32,6 +35,8 @@ class IndexController extends BaseController
      * 注销
      */
     public function logout() {
+        //销毁redis记录
+        $this->logoutStatus(Session::get('admin')['id']);
         Session::forget('admin');
         return redirect(route('login'));
     }
